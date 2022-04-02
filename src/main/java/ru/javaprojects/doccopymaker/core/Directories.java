@@ -1,7 +1,5 @@
 package ru.javaprojects.doccopymaker.core;
 
-import ru.javaprojects.doccopymaker.core.copycreator.DocumentCopyCreator;
-
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +13,7 @@ public class Directories {
     public static final Path DEFAULT_DESTINATION_DIRECTORY;
 
     static {
-        try (Reader reader = new InputStreamReader(DocumentCopyCreator.class.getClassLoader().getResourceAsStream("directories.properties"),
+        try (Reader reader = new InputStreamReader(Directories.class.getClassLoader().getResourceAsStream("directories.properties"),
                 StandardCharsets.UTF_8)) {
             Properties properties = new Properties();
             properties.load(reader);
