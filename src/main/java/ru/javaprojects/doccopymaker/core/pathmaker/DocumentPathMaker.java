@@ -37,11 +37,11 @@ public class DocumentPathMaker {
     }
 
     private String prepareCompanyCode(String decimalNumber) {
-        if (decimalNumber.startsWith(VUIA_COMPANY_CODE)) {
+        if (decimalNumber.startsWith(VUIA_COMPANY_CODE + DOT)) {
             return decimalNumber.replace(VUIA_COMPANY_CODE, VUIA);
-        } else if (decimalNumber.startsWith(_UPI_A_COMPANY_CODE)) {
+        } else if (decimalNumber.startsWith(_UPI_A_COMPANY_CODE + DOT)) {
             return decimalNumber.replace(_UPI_A_COMPANY_CODE, _UPI_A);
-        } else if (decimalNumber.startsWith(BA_COMPANY_CODE)) {
+        } else if (decimalNumber.startsWith(BA_COMPANY_CODE) && Character.toString(decimalNumber.charAt(3)).equals(DOT)) {
             decimalNumber = decimalNumber.replace(BA_COMPANY_CODE, "").replaceFirst("\\.", "");
             return BA + DOT + decimalNumber;
         } else {
@@ -59,12 +59,20 @@ public class DocumentPathMaker {
 
     private String getDecNumberMiddlePart(String decimalNumber, String companyCode) {
         String trimCompanyCode = decimalNumber.replace(companyCode + DOT, "");
-        return trimCompanyCode.substring(0, trimCompanyCode.indexOf(DOT));
+        if (trimCompanyCode.contains(DOT)) {
+            return trimCompanyCode.substring(0, trimCompanyCode.indexOf(DOT));
+        } else {
+            throw new UnsupportedDecimalNumberTypeException("Unsupported software decimal number type:" + decimalNumber);
+        }
     }
 
     private String getSoftwareDecNumberMiddlePart(String decimalNumber, String companyCode) {
         String trimCompanyCode = decimalNumber.replace(companyCode + DOT, "");
-        return trimCompanyCode.substring(0, trimCompanyCode.indexOf("-"));
+        if (trimCompanyCode.contains("-")) {
+            return trimCompanyCode.substring(0, trimCompanyCode.indexOf("-"));
+        } else {
+            throw new UnsupportedDecimalNumberTypeException("Unsupported software decimal number type:" + decimalNumber);
+        }
     }
 
     private String checkSpOrDetail(String middlePart, String lastPart) {

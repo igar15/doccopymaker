@@ -63,4 +63,14 @@ class DocumentPathMakerTest {
     void makePathWhenNotSupportedDocSpecifier() {
         assertThrows(UnsupportedDocSpecifierException.class, () -> pathMaker.makePath("ВУИА.468172.059ЦА"));
     }
+
+    @Test
+    void makePathWhenBadDecimalNumber() {
+        assertThrows(UnsupportedCompanyCodeException.class, () -> pathMaker.makePath("ВУИА468172.059"));
+        assertThrows(UnsupportedCompanyCodeException.class, () -> pathMaker.makePath("ВУИА20163-01 12 01"));
+        assertThrows(UnsupportedDecimalNumberTypeException.class, () -> pathMaker.makePath("ВУИА.2016301 12 01"));
+        assertThrows(UnsupportedDecimalNumberTypeException.class, () -> pathMaker.makePath("ВУИА.20163 01"));
+        assertThrows(UnsupportedDecimalNumberTypeException.class, () -> pathMaker.makePath("ВУИА.20163"));
+        assertThrows(UnsupportedDecimalNumberTypeException.class, () -> pathMaker.makePath("ВУИА.468172059"));
+    }
 }
