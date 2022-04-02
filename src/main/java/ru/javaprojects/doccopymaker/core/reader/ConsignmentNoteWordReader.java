@@ -5,6 +5,7 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,18 +19,22 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     private boolean isDocFileType = false;
 
     ConsignmentNoteWordReader(String cNotePath) {
-        try {
-            if (cNotePath.endsWith(DOCX_FILE_EXTENSION)) {
-                XWPFDocument document = new XWPFDocument(Files.newInputStream(Paths.get(cNotePath)));
+        if (cNotePath.endsWith(DOCX_FILE_EXTENSION)) {
+            try (InputStream fis = Files.newInputStream(Paths.get(cNotePath));
+                 XWPFDocument document = new XWPFDocument(fis)) {
                 XWPFWordExtractor ex = new XWPFWordExtractor(document);
                 this.documentText = ex.getText().toUpperCase();
-            } else if (cNotePath.endsWith(DOC_FILE_EXTENSION)) {
-                HWPFDocument document = new HWPFDocument(Files.newInputStream(Paths.get(cNotePath)));
+            } catch (IOException e) {
+                throw new FileReadingException(e.getMessage());
+            }
+        } else if (cNotePath.endsWith(DOC_FILE_EXTENSION)) {
+            try (InputStream fis = Files.newInputStream(Paths.get(cNotePath));
+                 HWPFDocument document = new HWPFDocument(fis)) {
                 this.documentText = document.getDocumentText().toUpperCase();
                 this.isDocFileType = true;
+            } catch (IOException e) {
+                throw new FileReadingException(e.getMessage());
             }
-        } catch (IOException e) {
-            throw new FileReadingException(e.getMessage());
         }
     }
 
