@@ -1,20 +1,34 @@
 package ru.javaprojects.doccopymaker;
 
 
-import org.apache.poi.hwpf.HWPFDocument;
-import ru.javaprojects.doccopymaker.core.DocumentCopyCreator;
+import ru.javaprojects.doccopymaker.core.reader.ConsignmentNoteReader;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class MainApp {
     public static void main(String[] args) throws IOException {
-        Path path = Paths.get("D:/tests/doc.doc");
-        HWPFDocument hwpfDocument = new HWPFDocument(Files.newInputStream(path));
-        System.out.println();
-        DocumentCopyCreator documentCopyCreator = new DocumentCopyCreator(path);
-        System.out.println();
+        ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("E:/ARCHIV_22_N/doc/Описи/3_sheets.doc");
+        List<String> decimalNumbers = reader.getDecimalNumbers();
+        System.out.println(decimalNumbers);
+    }
+
+    public static void readDocsConsignmentNoteDocFileType() {
+        ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("E:/ARCHIV_22_N/doc/Накладные/3 sheets with ed.doc");
+        List<String> decimalNumbers = reader.getDecimalNumbers();
+        System.out.println(decimalNumbers);
+    }
+
+    public static void readChangeNoticesConsignmentNoteDocFileType() {
+        ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("E:/ARCHIV_22_N/doc/Описи/3_sheets.doc");
+        List<String> decimalNumbers = reader.getDecimalNumbers();
+        System.out.println(decimalNumbers);
+    }
+
+    public static void readRegularTableConsignmentNoteDocFileType() {
+        ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("E:/ARCHIV_22_N/doc/Обычные таблицы/все эн.doc");
+        List<String> decimalNumbers = reader.getDecimalNumbers();
+        System.out.println(decimalNumbers);
     }
 }
