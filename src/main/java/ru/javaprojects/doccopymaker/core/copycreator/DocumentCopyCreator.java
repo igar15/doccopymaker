@@ -1,4 +1,6 @@
-package ru.javaprojects.doccopymaker.core;
+package ru.javaprojects.doccopymaker.core.copycreator;
+
+import ru.javaprojects.doccopymaker.core.pathmaker.DocumentPathMaker;
 
 import java.nio.file.Path;
 

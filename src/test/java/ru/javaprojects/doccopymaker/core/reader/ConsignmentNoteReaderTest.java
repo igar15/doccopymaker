@@ -1,8 +1,6 @@
-package ru.javaprojects.doccopymaker.core;
+package ru.javaprojects.doccopymaker.core.reader;
 
 import org.junit.jupiter.api.Test;
-import ru.javaprojects.doccopymaker.core.reader.BadFileTypeException;
-import ru.javaprojects.doccopymaker.core.reader.ConsignmentNoteReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
