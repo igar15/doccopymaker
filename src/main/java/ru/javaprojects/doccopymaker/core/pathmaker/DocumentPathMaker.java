@@ -1,6 +1,6 @@
 package ru.javaprojects.doccopymaker.core.pathmaker;
 
-import ru.javaprojects.doccopymaker.core.DocSpecifiers;
+import ru.javaprojects.doccopymaker.core.properties.DocSpecifiers;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

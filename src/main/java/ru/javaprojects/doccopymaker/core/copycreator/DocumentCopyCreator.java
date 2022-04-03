@@ -1,6 +1,6 @@
 package ru.javaprojects.doccopymaker.core.copycreator;
 
-import ru.javaprojects.doccopymaker.core.Directories;
+import ru.javaprojects.doccopymaker.core.properties.Directories;
 
 import java.io.IOException;
 import java.nio.file.Files;

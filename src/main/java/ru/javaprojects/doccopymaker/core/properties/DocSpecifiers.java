@@ -1,4 +1,4 @@
-package ru.javaprojects.doccopymaker.core;
+package ru.javaprojects.doccopymaker.core.properties;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
