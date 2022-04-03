@@ -25,7 +25,7 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
                 XWPFWordExtractor ex = new XWPFWordExtractor(document);
                 this.documentText = ex.getText().toUpperCase();
             } catch (IOException e) {
-                throw new FileReadingException(e.getMessage());
+                throw new FileReadingException(e.getClass().getName() + ":" + e.getMessage());
             }
         } else if (cNotePath.endsWith(DOC_FILE_EXTENSION)) {
             try (InputStream fis = Files.newInputStream(Paths.get(cNotePath));
@@ -33,7 +33,7 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
                 this.documentText = document.getDocumentText().toUpperCase();
                 this.isDocFileType = true;
             } catch (IOException e) {
-                throw new FileReadingException(e.getMessage());
+                throw new FileReadingException(e.getClass().getName() + ":" + e.getMessage());
             }
         }
     }

@@ -13,7 +13,7 @@ public class DocSpecifiers {
                 StandardCharsets.UTF_8)) {
             docSpecifiers.load(reader);
         } catch (Exception e) {
-            throw new PropertiesLoadException("Failed to load doc_specifiers properties.");
+            throw new PropertiesLoadException("Failed to load doc_specifiers properties, cause:" + e.getClass().getName() + ":" + e.getMessage());
         }
     }
 

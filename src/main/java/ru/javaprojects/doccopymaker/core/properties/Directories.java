@@ -21,7 +21,7 @@ public class Directories {
             DEFAULT_C_NOTE_DIRECTORY = Paths.get(properties.getProperty("default_c_note_directory"));
             DEFAULT_DESTINATION_DIRECTORY = Paths.get(properties.getProperty("default_destination_directory"));
         } catch (Exception e) {
-            throw new PropertiesLoadException("Failed to load directories properties.");
+            throw new PropertiesLoadException("Failed to load directories properties, cause:" + e.getClass().getName() + ":" + e.getMessage());
         }
     }
 }

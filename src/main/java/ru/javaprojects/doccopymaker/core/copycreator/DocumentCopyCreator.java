@@ -26,11 +26,13 @@ public class DocumentCopyCreator {
                     Path targetPath = destinationDirectory.resolve(documentDirectoryPath).resolve(path.getFileName());
                     Files.copy(path, targetPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    throw new CopyCreationException("Failed to create copy of document:" + path);
+                    throw new CopyCreationException("Failed to create copy of document:" + path + ", cause:" +
+                            e.getClass().getName() + ":" + e.getMessage());
                 }
             });
         } catch (IOException e) {
-            throw new CopyCreationException("Failed to create copy of document:" + documentDirectoryPath);
+            throw new CopyCreationException("Failed to create copy of document:" + documentDirectoryPath + ", cause:" +
+                    e.getClass().getName() + ":" + e.getMessage());
         }
     }
 }
