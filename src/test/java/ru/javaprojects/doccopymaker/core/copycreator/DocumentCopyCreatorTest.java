@@ -18,9 +18,10 @@ class DocumentCopyCreatorTest {
     void createCopy() throws IOException {
         Path tempDirectory = Files.createTempDirectory("tempDir");
         DocumentCopyCreator creator = new DocumentCopyCreator(tempDirectory);
-        Path documentPath = Paths.get("VUIA/436634/009/SP");
+        Path documentPath = Paths.get("ABCD/456789/009/SP");
         creator.createCopy(documentPath);
         List<Path> fileList = Files.list(tempDirectory.resolve(documentPath)).collect(Collectors.toList());
+        fileList.sort(Path::compareTo);
         assertEquals("1.txt", fileList.get(0).getFileName().toString());
         assertEquals("2.txt", fileList.get(1).getFileName().toString());
         assertEquals("3.txt", fileList.get(2).getFileName().toString());
@@ -30,9 +31,10 @@ class DocumentCopyCreatorTest {
     void createSoftwareCopy() throws IOException {
         Path tempDirectory = Files.createTempDirectory("tempDir");
         DocumentCopyCreator creator = new DocumentCopyCreator(tempDirectory);
-        Path documentPath = Paths.get("VUIA/20196/-01/12/01");
+        Path documentPath = Paths.get("ABCD/20000/-01/34/01");
         creator.createCopy(documentPath);
         List<Path> fileList = Files.list(tempDirectory.resolve(documentPath)).collect(Collectors.toList());
+        fileList.sort(Path::compareTo);
         assertEquals("1.txt", fileList.get(0).getFileName().toString());
         assertEquals("2.txt", fileList.get(1).getFileName().toString());
     }
@@ -41,10 +43,11 @@ class DocumentCopyCreatorTest {
     void createCopyAlreadyExist() throws IOException {
         Path tempDirectory = Files.createTempDirectory("tempDir");
         DocumentCopyCreator creator = new DocumentCopyCreator(tempDirectory);
-        Path documentPath = Paths.get("VUIA/436634/009/SP");
+        Path documentPath = Paths.get("ABCD/456789/009/SP");
         creator.createCopy(documentPath);
         creator.createCopy(documentPath);
         List<Path> fileList = Files.list(tempDirectory.resolve(documentPath)).collect(Collectors.toList());
+        fileList.sort(Path::compareTo);
         assertEquals("1.txt", fileList.get(0).getFileName().toString());
         assertEquals("2.txt", fileList.get(1).getFileName().toString());
         assertEquals("3.txt", fileList.get(2).getFileName().toString());
@@ -54,7 +57,7 @@ class DocumentCopyCreatorTest {
     void createCopyWhenDocumentNotFound() throws IOException {
         Path tempDirectory = Files.createTempDirectory("tempDir");
         DocumentCopyCreator creator = new DocumentCopyCreator(tempDirectory);
-        Path documentPath = Paths.get("VUIA/455666/001/SP");
+        Path documentPath = Paths.get("ABCD/456789/001/SP");
         assertThrows(CopyCreationException.class, () -> creator.createCopy(documentPath));
     }
 }
