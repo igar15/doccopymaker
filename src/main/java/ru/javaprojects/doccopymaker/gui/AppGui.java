@@ -1,10 +1,12 @@
 package ru.javaprojects.doccopymaker.gui;
 
+import org.assertj.core.util.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javaprojects.doccopymaker.core.copycreator.DocumentCopyCreator;
 import ru.javaprojects.doccopymaker.core.pathmaker.DocumentPathMaker;
 import ru.javaprojects.doccopymaker.core.properties.Directories;
+import ru.javaprojects.doccopymaker.core.properties.DocSpecifiers;
 import ru.javaprojects.doccopymaker.core.reader.ConsignmentNoteReader;
 
 import javax.swing.*;
@@ -59,7 +61,7 @@ public class AppGui {
         createCopyDocumentLabel();
         createProgressLabel();
         createStartButton();
-        setDefaultDestinationDirectory();
+        setupDefaultDirectories();
         createAppFrame();
     }
 
@@ -82,7 +84,7 @@ public class AppGui {
     }
 
     private void createCNoteFileChooser() {
-        cNoteFileChooser = new JFileChooser(Directories.DEFAULT_C_NOTE_DIRECTORY.toString());
+        cNoteFileChooser = new JFileChooser();
         cNoteFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         cNoteFileChooser.setFileFilter(new FileFilter() {
             @Override
@@ -128,7 +130,7 @@ public class AppGui {
     }
 
     private void createDestinationDirectoryChooser() {
-        destinationDirectoryChooser = new JFileChooser(Directories.DEFAULT_DESTINATION_DIRECTORY.toString());
+        destinationDirectoryChooser = new JFileChooser();
         destinationDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     }
 
@@ -211,10 +213,13 @@ public class AppGui {
         });
     }
 
-    private void setDefaultDestinationDirectory() {
+    private void setupDefaultDirectories() {
         try {
             destinationDirectory = Directories.DEFAULT_DESTINATION_DIRECTORY;
             chooseDestinationField.setText(destinationDirectory.toString());
+            cNoteFileChooser.setCurrentDirectory(new File(Directories.DEFAULT_C_NOTE_DIRECTORY.toString()));
+            destinationDirectoryChooser.setCurrentDirectory(new File(Directories.DEFAULT_DESTINATION_DIRECTORY.toString()));
+            DocSpecifiers.getDocSpecifier("СП"); //load properties on GUI setup phase to show exception if failed
         } catch (Exception e) {
             errorInfoArea.setText(e.getMessage());
         }
