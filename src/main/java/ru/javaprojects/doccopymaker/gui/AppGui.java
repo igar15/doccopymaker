@@ -263,7 +263,6 @@ public class AppGui {
             SwingUtilities.invokeLater(() -> progressLabel.setText(String.format("Скопировано документов: %d/%d", copyCounter.get(), decimalNumbers.size())));
             decimalNumbers.forEach(decimalNumber -> {
                 try {
-                    Thread.sleep(500);
                     SwingUtilities.invokeLater(() -> copyDocumentLabel.setText("Копируется документ: " + decimalNumber));
                     Path documentPath = pathMaker.makePath(decimalNumber);
                     copyCreator.createCopy(documentPath);

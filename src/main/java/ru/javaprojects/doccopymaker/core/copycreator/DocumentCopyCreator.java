@@ -19,8 +19,7 @@ public class DocumentCopyCreator {
     }
 
     public void createCopy(Path documentDirectoryPath) {
-        try {
-            Stream<Path> pathStream = Files.list(Directories.ARCHIVE_DIRECTORY.resolve(documentDirectoryPath));
+        try (Stream<Path> pathStream = Files.list(Directories.ARCHIVE_DIRECTORY.resolve(documentDirectoryPath))) {
             if (!Files.exists(destinationDirectory.resolve(documentDirectoryPath))) {
                 Files.createDirectories(destinationDirectory.resolve(documentDirectoryPath));
             }
