@@ -197,8 +197,11 @@ public class AppGui {
         startButton = new JButton("Начать");
         startButton.setBounds(860, 610, 95, 40);
         startButton.addActionListener(event -> {
+            String[] fileList = destinationDirectory.toFile().list();
             if (Objects.isNull(cNotePath)) {
                 JOptionPane.showMessageDialog(appFrame, "Вы не выбрали накладную, опись или таблицу!", "Ошибка", ERROR_MESSAGE);
+            } else if (Objects.nonNull(fileList) && fileList.length > 0) {
+                JOptionPane.showMessageDialog(appFrame, "Папка для записи должна быть пуста!", "Ошибка", ERROR_MESSAGE);
             } else {
                 SwingWorker<String, Void> makeCopiesWorker= new SwingWorker<String, Void>() {
                     @Override
