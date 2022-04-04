@@ -1,11 +1,15 @@
 package ru.javaprojects.doccopymaker.core.properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class DocSpecifiers {
+    private static final Logger log = LoggerFactory.getLogger(DocSpecifiers.class);
     private static final Properties docSpecifiers = new Properties();
 
     static {
@@ -13,7 +17,9 @@ public class DocSpecifiers {
                 StandardCharsets.UTF_8)) {
             docSpecifiers.load(reader);
         } catch (Exception e) {
-            throw new PropertiesLoadException("Failed to load doc_specifiers properties, cause:" + e.getClass().getName() + ":" + e.getMessage());
+            String message = String.format("Failed to load doc_specifiers properties, cause:%s:%s", e.getClass().getName(), e.getMessage());
+            log.error(message);
+            throw new PropertiesLoadException(message);
         }
     }
 

@@ -1,9 +1,13 @@
 package ru.javaprojects.doccopymaker.core.reader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.Objects;
 
 public abstract class ConsignmentNoteReader {
+    private static final Logger log = LoggerFactory.getLogger(ConsignmentNoteReader.class);
     public static final String DOC_FILE_EXTENSION = ".doc";
     public static final String DOCX_FILE_EXTENSION = ".docx";
     public static final String DOCS_CONSIGNMENT_NOTE_IDENTIFIER = "НАКЛАДНАЯ";
@@ -14,8 +18,10 @@ public abstract class ConsignmentNoteReader {
         if (cNotePath.endsWith(DOCX_FILE_EXTENSION) || cNotePath.endsWith(DOC_FILE_EXTENSION)) {
             return new ConsignmentNoteWordReader(cNotePath);
         } else {
-            throw new BadFileTypeException(String.format("File type is not supported. Only \"%s\" and \"%s\" file types " +
-                            "are supported.", DOC_FILE_EXTENSION, DOCX_FILE_EXTENSION));
+            String message = String.format("File type is not supported. Only \"%s\" and \"%s\" file types " +
+                    "are supported.", DOC_FILE_EXTENSION, DOCX_FILE_EXTENSION);
+            log.error(message);
+            throw new BadFileTypeException(message);
         }
     }
 

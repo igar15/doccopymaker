@@ -1,5 +1,7 @@
 package ru.javaprojects.doccopymaker.core.copycreator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.javaprojects.doccopymaker.core.properties.Directories;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.stream.Stream;
 
 public class DocumentCopyCreator {
     private final Path destinationDirectory;
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     public DocumentCopyCreator(Path destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
@@ -26,13 +29,18 @@ public class DocumentCopyCreator {
                     Path targetPath = destinationDirectory.resolve(documentDirectoryPath).resolve(path.getFileName());
                     Files.copy(path, targetPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    throw new CopyCreationException("Failed to create copy of document:" + path + ", cause:" +
-                            e.getClass().getName() + ":" + e.getMessage());
+                    handleIoException(e, path);
                 }
             });
         } catch (IOException e) {
-            throw new CopyCreationException("Failed to create copy of document:" + documentDirectoryPath + ", cause:" +
-                    e.getClass().getName() + ":" + e.getMessage());
+            handleIoException(e, documentDirectoryPath);
         }
+    }
+
+    private void handleIoException(IOException e, Path docPath) {
+        String message = String.format("Failed to create copy of document %s, cause:%s:%s",
+                docPath, e.getClass().getName(), e.getMessage());
+        log.error(message);
+        throw new CopyCreationException(message);
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>C:/log/doccopymaker/doccopymaker.log</file>
+
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date %-5level %logger{50}.%M:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="ru.javaprojects.doccopymaker" level="info"/>
+
+    <root level="info">
+        <appender-ref ref="file"/>
+    </root>
+</configuration>

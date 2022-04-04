@@ -1,5 +1,7 @@
 package ru.javaprojects.doccopymaker.core.pathmaker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.javaprojects.doccopymaker.core.properties.DocSpecifiers;
 
 import java.nio.file.Path;
@@ -17,6 +19,7 @@ public class DocumentPathMaker {
     private static final String SPECIFICATION_SPECIFIER = "СП";
     private static final String DETAIL_SPECIFIER = "КД";
     private static final String LETTER_REPLACEMENT_CHARACTER = "|";
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     public Path makePath(String decimalNumber) {
         decimalNumber = prepareCompanyCode(decimalNumber);
@@ -45,7 +48,9 @@ public class DocumentPathMaker {
             decimalNumber = decimalNumber.replace(BA_COMPANY_CODE, "").replaceFirst("\\.", "");
             return BA + DOT + decimalNumber;
         } else {
-            throw new UnsupportedCompanyCodeException("Unsupported company code in decimal number:" + decimalNumber);
+            String message = "Unsupported company code in decimal number:" + decimalNumber;
+            log.warn(message);
+            throw new UnsupportedCompanyCodeException(message);
         }
     }
 
@@ -62,7 +67,9 @@ public class DocumentPathMaker {
         if (trimCompanyCode.contains(DOT)) {
             return trimCompanyCode.substring(0, trimCompanyCode.indexOf(DOT));
         } else {
-            throw new UnsupportedDecimalNumberTypeException("Unsupported software decimal number type:" + decimalNumber);
+            String message = "Unsupported decimal number type:" + decimalNumber;
+            log.warn(message);
+            throw new UnsupportedDecimalNumberTypeException(message);
         }
     }
 
@@ -71,7 +78,9 @@ public class DocumentPathMaker {
         if (trimCompanyCode.contains("-")) {
             return trimCompanyCode.substring(0, trimCompanyCode.indexOf("-"));
         } else {
-            throw new UnsupportedDecimalNumberTypeException("Unsupported software decimal number type:" + decimalNumber);
+            String message = "Unsupported software decimal number type:" + decimalNumber;
+            log.warn(message);
+            throw new UnsupportedDecimalNumberTypeException(message);
         }
     }
 
@@ -92,7 +101,9 @@ public class DocumentPathMaker {
         String docSpecifierPart = lastPart.substring(firstLetterIndex);
         String docSpecifier = DocSpecifiers.getDocSpecifier(docSpecifierPart);
         if (Objects.isNull(docSpecifier)) {
-            throw new UnsupportedDocSpecifierException("Unsupported document specifier:" + docSpecifierPart);
+            String message = "Unsupported document specifier:" + docSpecifierPart;
+            log.warn(message);
+            throw new UnsupportedDocSpecifierException(message);
         }
         if (numbersPart.contains("-")) {
             int dashIndex = numbersPart.indexOf("-");

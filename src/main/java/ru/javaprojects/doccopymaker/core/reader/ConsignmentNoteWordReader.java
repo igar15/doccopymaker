@@ -3,6 +3,8 @@ package ru.javaprojects.doccopymaker.core.reader;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +17,7 @@ import java.util.List;
 public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     private static final String DOC_SPLIT_CHARACTER = "\u0007";
     private static final String ELECTRONIC_DOCUMENT_IDENTIFIER = "ЭН";
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private String documentText;
     private boolean isDocFileType = false;
 
@@ -25,7 +28,7 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
                 XWPFWordExtractor ex = new XWPFWordExtractor(document);
                 this.documentText = ex.getText().toUpperCase();
             } catch (IOException e) {
-                throw new FileReadingException(e.getClass().getName() + ":" + e.getMessage());
+                handleIoException(e, cNotePath);
             }
         } else if (cNotePath.endsWith(DOC_FILE_EXTENSION)) {
             try (InputStream fis = Files.newInputStream(Paths.get(cNotePath));
@@ -33,9 +36,15 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
                 this.documentText = document.getDocumentText().toUpperCase();
                 this.isDocFileType = true;
             } catch (IOException e) {
-                throw new FileReadingException(e.getClass().getName() + ":" + e.getMessage());
+                handleIoException(e, cNotePath);
             }
         }
+    }
+
+    private void handleIoException(IOException e, String cNotePath) {
+        String message = String.format("Failed to read file %s, cause:%s:%s", cNotePath, e.getClass().getName(), e.getMessage());
+        log.error(message);
+        throw new FileReadingException(message);
     }
 
     @Override
