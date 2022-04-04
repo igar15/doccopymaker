@@ -18,6 +18,7 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 public class AppGui {
     private JFrame appFrame;
+    private Font appFont;
     private JLabel chooseCNoteLabel;
     private JTextField chooseCNoteField;
     private JButton chooseCNoteButton;
@@ -26,8 +27,10 @@ public class AppGui {
     private JButton chooseDestinationButton;
     private JLabel copyInfoLabel;
     private JTextArea copyInfoArea;
+    private JScrollPane copyInfoScroller;
     private JLabel errorInfoLabel;
     private JTextArea errorInfoArea;
+    private JScrollPane errorInfoScroller;
     private JLabel copyDocumentLabel;
     private JLabel progressLabel;
     private JButton startButton;
@@ -37,25 +40,85 @@ public class AppGui {
     private Path cNotePath;
 
     public void makeGui() {
+        createAppFont();
+        createCNoteLabel();
+        createCNoteField();
+        createCNoteFileChooser();
+        createChooseCNoteButton();
+        createChooseDestinationLabel();
+        createChooseDestinationField();
+        createDestinationDirectoryChooser();
+        createChooseDestinationButton();
+        createCopyInfoLabel();
+        createCopyInfoArea();
+        createErrorInfoLabel();
+        createErrorInfoArea();
+        createCopyDocumentLabel();
+        createProgressLabel();
+        createStartButton();
+        createAppFrame();
+    }
+
+    private void createAppFrame() {
         appFrame = new JFrame("Electronic Document Copy Maker");
         appFrame.setSize(1024, 750);
         appFrame.setLayout(null);
         appFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        appFrame.add(chooseCNoteLabel);
+        appFrame.add(chooseCNoteField);
+        appFrame.add(chooseCNoteButton);
+        appFrame.add(chooseDestinationLabel);
+        appFrame.add(chooseDestinationField);
+        appFrame.add(chooseDestinationButton);
+        appFrame.add(copyInfoLabel);
+        appFrame.add(copyInfoScroller);
+        appFrame.add(errorInfoLabel);
+        appFrame.add(errorInfoScroller);
+        appFrame.add(copyDocumentLabel);
+        appFrame.add(progressLabel);
+        appFrame.add(startButton);
+        appFrame.setVisible(true);
+    }
 
-        Font courierNew = new Font("Courier New", Font.BOLD, 18);
+    private void createAppFont() {
+        appFont = new Font("Courier New", Font.BOLD, 18);
+    }
 
+    private void createCNoteLabel() {
         chooseCNoteLabel = new JLabel("Выберите накладную, опись или таблицу:");
-        chooseCNoteLabel.setFont(courierNew);
+        chooseCNoteLabel.setFont(appFont);
         chooseCNoteLabel.setBounds(50, 30, 500, 20);
+    }
 
+    private void createCNoteField() {
         chooseCNoteField = new JTextField();
-        chooseCNoteField.setFont(courierNew);
+        chooseCNoteField.setFont(appFont);
         chooseCNoteField.setDisabledTextColor(Color.BLACK);
         chooseCNoteField.setBounds(50, 50, 500, 30);
         chooseCNoteField.setEnabled(false);
+    }
 
-        cNoteFileChooser = getCNoteFileChooser();
+    private void createCNoteFileChooser() {
+        cNoteFileChooser = new JFileChooser(Directories.DEFAULT_C_NOTE_DIRECTORY.toString());
+        cNoteFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        cNoteFileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+                String fileName = f.getName().toLowerCase();
+                return fileName.endsWith(".doc") || fileName.endsWith(".docx");
+            }
 
+            @Override
+            public String getDescription() {
+                return "MS Word documents (*.doc, *.docx)";
+            }
+        });
+    }
+
+    private void createChooseCNoteButton() {
         chooseCNoteButton = new JButton("Выбрать");
         chooseCNoteButton.setBounds(560, 50, 95, 30);
         chooseCNoteButton.addActionListener(event -> {
@@ -65,20 +128,29 @@ public class AppGui {
                 chooseCNoteField.setText(cNotePath.getFileName().toString());
             }
         });
+    }
 
+    private void createChooseDestinationLabel() {
         chooseDestinationLabel = new JLabel("Выберите папку, куда будут записаны копии:");
-        chooseDestinationLabel.setFont(courierNew);
+        chooseDestinationLabel.setFont(appFont);
         chooseDestinationLabel.setBounds(50, 100, 500, 20);
+    }
 
+    private void createChooseDestinationField() {
         chooseDestinationField = new JTextField();
-        chooseDestinationField.setFont(courierNew);
+        chooseDestinationField.setFont(appFont);
         chooseDestinationField.setDisabledTextColor(Color.BLACK);
         chooseDestinationField.setText(destinationDirectory.toString());
         chooseDestinationField.setBounds(50, 120, 500, 30);
         chooseDestinationField.setEnabled(false);
+    }
 
-        destinationDirectoryChooser = getDestinationDirectoryChooser();
+    private void createDestinationDirectoryChooser() {
+        destinationDirectoryChooser = new JFileChooser(Directories.DEFAULT_DESTINATION_DIRECTORY.toString());
+        destinationDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    }
 
+    private void createChooseDestinationButton() {
         chooseDestinationButton = new JButton("Выбрать");
         chooseDestinationButton.setBounds(560, 120, 95, 30);
         chooseDestinationButton.addActionListener(event -> {
@@ -88,43 +160,57 @@ public class AppGui {
                 chooseDestinationField.setText(destinationDirectory.toString());
             }
         });
+    }
 
+    private void createCopyInfoLabel() {
         copyInfoLabel = new JLabel();
-        copyInfoLabel.setFont(courierNew);
+        copyInfoLabel.setFont(appFont);
         copyInfoLabel.setBounds(50, 190, 420, 20);
+    }
 
+    private void createCopyInfoArea() {
         copyInfoArea = new JTextArea(10, 20);
         copyInfoArea.setEnabled(false);
-        copyInfoArea.setLineWrap(true);
-        copyInfoArea.setFont(courierNew);
+        copyInfoArea.setFont(appFont);
         copyInfoArea.setDisabledTextColor(Color.BLACK);
-        JScrollPane copyInfoScroller = new JScrollPane(copyInfoArea);
+        copyInfoScroller = new JScrollPane(copyInfoArea);
         copyInfoScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         copyInfoScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         copyInfoScroller.setBounds(50, 210, 420, 300);
+    }
 
+    private void createErrorInfoLabel() {
         errorInfoLabel = new JLabel();
-        errorInfoLabel.setFont(courierNew);
+        errorInfoLabel.setFont(appFont);
         errorInfoLabel.setBounds(535, 190, 420, 20);
+    }
 
+    private void createErrorInfoArea() {
         errorInfoArea = new JTextArea(10, 20);
         errorInfoArea.setEnabled(false);
         errorInfoArea.setLineWrap(true);
-        errorInfoArea.setFont(courierNew);
+        errorInfoArea.setFont(appFont);
         errorInfoArea.setDisabledTextColor(Color.RED);
-        JScrollPane errorInfoScroller = new JScrollPane(errorInfoArea);
+        errorInfoScroller = new JScrollPane(errorInfoArea);
         errorInfoScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         errorInfoScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         errorInfoScroller.setBounds(535, 210, 420, 300);
+    }
 
+    private void createCopyDocumentLabel() {
         copyDocumentLabel = new JLabel();
-        copyDocumentLabel.setFont(courierNew);
+        copyDocumentLabel.setFont(appFont);
         copyDocumentLabel.setBounds(360, 530, 500, 20);
+    }
 
+
+    private void createProgressLabel() {
         progressLabel = new JLabel();
-        progressLabel.setFont(courierNew);
+        progressLabel.setFont(appFont);
         progressLabel.setBounds(360, 560, 400, 20);
+    }
 
+    private void createStartButton() {
         startButton = new JButton("Начать");
         startButton.setBounds(860, 610, 95, 40);
         startButton.addActionListener(event -> {
@@ -142,48 +228,6 @@ public class AppGui {
                 makeCopiesWorker.execute();
             }
         });
-
-        appFrame.add(chooseCNoteLabel);
-        appFrame.add(chooseCNoteField);
-        appFrame.add(chooseCNoteButton);
-        appFrame.add(chooseDestinationLabel);
-        appFrame.add(chooseDestinationField);
-        appFrame.add(chooseDestinationButton);
-        appFrame.add(copyInfoLabel);
-        appFrame.add(copyInfoScroller);
-        appFrame.add(errorInfoLabel);
-        appFrame.add(errorInfoScroller);
-        appFrame.add(copyDocumentLabel);
-        appFrame.add(progressLabel);
-        appFrame.add(startButton);
-        appFrame.setVisible(true);
-    }
-
-    private JFileChooser getCNoteFileChooser() {
-        JFileChooser cNoteFileChooser = new JFileChooser(Directories.DEFAULT_C_NOTE_DIRECTORY.toString());
-        cNoteFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        cNoteFileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                }
-                String fileName = f.getName().toLowerCase();
-                return fileName.endsWith(".doc") || fileName.endsWith(".docx");
-            }
-
-            @Override
-            public String getDescription() {
-                return "MS Word documents (*.doc, *.docx)";
-            }
-        });
-        return cNoteFileChooser;
-    }
-
-    private JFileChooser getDestinationDirectoryChooser() {
-        JFileChooser destinationDirectoryChooser = new JFileChooser(Directories.DEFAULT_DESTINATION_DIRECTORY.toString());
-        destinationDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        return destinationDirectoryChooser;
     }
 
     private void makeCopies() {
@@ -205,13 +249,13 @@ public class AppGui {
                 SwingUtilities.invokeLater(() -> copyDocumentLabel.setText("Копируется документ: " + decimalNumber));
                 Path documentPath = pathMaker.makePath(decimalNumber);
                 copyCreator.createCopy(documentPath);
-                String message = String.format("%-29sУспешно\n", decimalNumber);
+                String message = String.format("%-28sУспешно\n", decimalNumber);
                 SwingUtilities.invokeLater(() -> {
                     copyInfoArea.append(message);
                     progressLabel.setText(String.format("Скопировано документов: %d/%d", copyCounter.incrementAndGet(), decimalNumbers.size()));
                 });
             } catch (Exception e) {
-                String message = String.format("%-29sНеудача\n", decimalNumber);
+                String message = String.format("%-28sНеудача\n", decimalNumber);
                 SwingUtilities.invokeLater(() -> {
                     errorInfoLabel.setText("Не удалось создать копии:");
                     copyInfoArea.append(message);
