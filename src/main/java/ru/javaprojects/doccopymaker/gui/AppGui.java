@@ -202,6 +202,7 @@ public class AppGui {
             if (Objects.isNull(cNotePath)) {
                 JOptionPane.showMessageDialog(appFrame, "Вы не выбрали накладную, опись или таблицу!", "Ошибка", ERROR_MESSAGE);
             } else if (Objects.nonNull(fileList) && fileList.length > 0) {
+                setEmptyValuesToInfoAreas();
                 JOptionPane.showMessageDialog(appFrame, "Папка для записи должна быть пуста!", "Ошибка", ERROR_MESSAGE);
             } else {
                 SwingWorker<String, Void> makeCopiesWorker= new SwingWorker<String, Void>() {
@@ -229,7 +230,7 @@ public class AppGui {
     }
 
     private void createAppFrame() {
-        appFrame = new JFrame("Electronic Document Copy Maker");
+        appFrame = new JFrame("Copy Maker");
         appFrame.setSize(1024, 750);
         appFrame.setLayout(null);
         appFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -253,12 +254,7 @@ public class AppGui {
         log.info("Start create copies from consignment note:{}, destination directory:{}", cNotePath, destinationDirectory);
         SwingUtilities.invokeLater(() -> {
             startButton.setEnabled(false);
-            copyInfoLabel.setText("");
-            copyInfoArea.setText("");
-            errorInfoArea.setText("");
-            errorInfoLabel.setText("");
-            copyDocumentLabel.setText("");
-            progressLabel.setText("");
+            setEmptyValuesToInfoAreas();
         });
         try {
             ConsignmentNoteReader noteReader = ConsignmentNoteReader.getReader(cNotePath.toString());
@@ -312,5 +308,14 @@ public class AppGui {
         SwingUtilities.invokeLater(() -> {
             startButton.setEnabled(true);
         });
+    }
+
+    private void setEmptyValuesToInfoAreas() {
+        copyInfoLabel.setText("");
+        copyInfoArea.setText("");
+        errorInfoArea.setText("");
+        errorInfoLabel.setText("");
+        copyDocumentLabel.setText("");
+        progressLabel.setText("");
     }
 }
