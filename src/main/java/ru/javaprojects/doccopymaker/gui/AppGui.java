@@ -252,42 +252,51 @@ public class AppGui {
         log.info("Start create copies from consignment note:{}, destination directory:{}", cNotePath, destinationDirectory);
         SwingUtilities.invokeLater(() -> {
             startButton.setEnabled(false);
+            copyInfoLabel.setText("");
             copyInfoArea.setText("");
             errorInfoArea.setText("");
             errorInfoLabel.setText("");
-            copyInfoLabel.setText("Ход копирования:");
+            copyDocumentLabel.setText("");
+            progressLabel.setText("");
         });
         try {
             ConsignmentNoteReader noteReader = ConsignmentNoteReader.getReader(cNotePath.toString());
             List<String> decimalNumbers = noteReader.getDecimalNumbers();
-            DocumentPathMaker pathMaker = new DocumentPathMaker();
-            DocumentCopyCreator copyCreator = new DocumentCopyCreator(destinationDirectory);
-            AtomicInteger copyCounter = new AtomicInteger(0);
-            SwingUtilities.invokeLater(() -> progressLabel.setText(String.format("Скопировано документов: %d/%d", copyCounter.get(), decimalNumbers.size())));
-            decimalNumbers.forEach(decimalNumber -> {
-                try {
-                    SwingUtilities.invokeLater(() -> copyDocumentLabel.setText("Копируется документ: " + decimalNumber));
-                    Path documentPath = pathMaker.makePath(decimalNumber);
-                    copyCreator.createCopy(documentPath);
-                    String message = String.format("%-28sУспешно\n", decimalNumber);
-                    SwingUtilities.invokeLater(() -> {
-                        copyInfoArea.append(message);
-                        progressLabel.setText(String.format("Скопировано документов: %d/%d", copyCounter.incrementAndGet(), decimalNumbers.size()));
-                    });
-                } catch (Exception e) {
-                    String message = String.format("%-28sНеудача\n", decimalNumber);
-                    SwingUtilities.invokeLater(() -> {
-                        errorInfoLabel.setText("Не удалось создать копии:");
-                        copyInfoArea.append(message);
-                        errorInfoArea.append(decimalNumber + "\n");
-                    });
-                }
-            });
-            SwingUtilities.invokeLater(() -> {
-                copyDocumentLabel.setText("Копирование завершено");
-                errorInfoArea.setCaretPosition(0);
-            });
-            log.info("Finish create copies from consignment note:{}, destination directory:{}", cNotePath, destinationDirectory);
+            if (decimalNumbers.isEmpty()) {
+                JOptionPane.showMessageDialog(appFrame, "Выбранный перечень не содержит электронных документов!", "Предупреждение", JOptionPane.WARNING_MESSAGE);
+            } else {
+                DocumentPathMaker pathMaker = new DocumentPathMaker();
+                DocumentCopyCreator copyCreator = new DocumentCopyCreator(destinationDirectory);
+                AtomicInteger copyCounter = new AtomicInteger(0);
+                SwingUtilities.invokeLater(() -> {
+                    copyInfoLabel.setText("Ход копирования:");
+                    progressLabel.setText(String.format("Скопировано документов: %d/%d", copyCounter.get(), decimalNumbers.size()));
+                });
+                decimalNumbers.forEach(decimalNumber -> {
+                    try {
+                        SwingUtilities.invokeLater(() -> copyDocumentLabel.setText("Копируется документ: " + decimalNumber));
+                        Path documentPath = pathMaker.makePath(decimalNumber);
+                        copyCreator.createCopy(documentPath);
+                        String message = String.format("%-28sУспешно\n", decimalNumber);
+                        SwingUtilities.invokeLater(() -> {
+                            copyInfoArea.append(message);
+                            progressLabel.setText(String.format("Скопировано документов: %d/%d", copyCounter.incrementAndGet(), decimalNumbers.size()));
+                        });
+                    } catch (Exception e) {
+                        String message = String.format("%-28sНеудача\n", decimalNumber);
+                        SwingUtilities.invokeLater(() -> {
+                            errorInfoLabel.setText("Не удалось создать копии:");
+                            copyInfoArea.append(message);
+                            errorInfoArea.append(decimalNumber + "\n");
+                        });
+                    }
+                });
+                SwingUtilities.invokeLater(() -> {
+                    copyDocumentLabel.setText("Копирование завершено");
+                    errorInfoArea.setCaretPosition(0);
+                });
+                log.info("Finish create copies from consignment note:{}, destination directory:{}", cNotePath, destinationDirectory);
+            }
         } catch (Exception e) {
             String message = String.format("Failed create copies from consignment note:%s, destination directory:%s, " +
                     "cause:%s:%s", cNotePath, destinationDirectory, e.getClass().getName(), e.getMessage());
