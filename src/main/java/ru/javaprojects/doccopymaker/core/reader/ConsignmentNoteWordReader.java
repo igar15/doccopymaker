@@ -58,6 +58,11 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     }
 
     @Override
+    protected boolean isFileRegularTableConsignmentNote() {
+        return documentText.contains(REGULAR_TABLE_CONSIGNMENT_NOTE_IDENTIFIER);
+    }
+
+    @Override
     protected List<String> readDocsConsignmentNote() {
         List<String> decimalNumbers = new ArrayList<>();
         String rowSplitCharacter = isDocFileType ? DOC_SPLIT_CHARACTER + DOC_SPLIT_CHARACTER : "\n";
@@ -89,6 +94,7 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
 
     @Override
     protected List<String> readRegularTableConsignmentNote() {
+        documentText = documentText.replace(REGULAR_TABLE_CONSIGNMENT_NOTE_IDENTIFIER, "");
         String rowSplitCharacter = isDocFileType ? DOC_SPLIT_CHARACTER + DOC_SPLIT_CHARACTER : "\n";
         return Arrays.asList(documentText.trim().split(rowSplitCharacter));
     }

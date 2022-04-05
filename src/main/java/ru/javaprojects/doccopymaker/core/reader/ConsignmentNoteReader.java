@@ -12,6 +12,7 @@ public abstract class ConsignmentNoteReader {
     public static final String DOCX_FILE_EXTENSION = ".docx";
     public static final String DOCS_CONSIGNMENT_NOTE_IDENTIFIER = "НАКЛАДНАЯ";
     public static final String CHANGE_NOTICES_CONSIGNMENT_NOTE_IDENTIFIER = "ОПИСЬ";
+    public static final String REGULAR_TABLE_CONSIGNMENT_NOTE_IDENTIFIER = "СПИСОК ЭЛЕКТРОННЫХ ДОКУМЕНТОВ";
     private List<String> decimalNumbers;
 
     public static ConsignmentNoteReader getReader(String cNotePath) {
@@ -21,7 +22,7 @@ public abstract class ConsignmentNoteReader {
             String message = String.format("File type is not supported. Only \"%s\" and \"%s\" file types " +
                     "are supported.", DOC_FILE_EXTENSION, DOCX_FILE_EXTENSION);
             log.error(message);
-            throw new BadFileTypeException(message);
+            throw new UnsupportedFileTypeException(message);
         }
     }
 
@@ -37,14 +38,18 @@ public abstract class ConsignmentNoteReader {
             return readDocsConsignmentNote();
         } else if (isFileChangeNoticesConsignmentNote()) {
             return readChangeNoticesConsignmentNote();
-        } else {
+        } else if (isFileRegularTableConsignmentNote()) {
             return readRegularTableConsignmentNote();
+        } else {
+            throw new UnsupportedConsignmentNoteException("This consignment note type is not supported");
         }
     }
 
     protected abstract boolean isFileDocsConsignmentNote();
 
     protected abstract boolean isFileChangeNoticesConsignmentNote();
+
+    protected abstract boolean isFileRegularTableConsignmentNote();
 
     protected abstract List<String> readDocsConsignmentNote();
 

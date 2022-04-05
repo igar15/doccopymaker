@@ -7,6 +7,7 @@ import ru.javaprojects.doccopymaker.core.pathmaker.DocumentPathMaker;
 import ru.javaprojects.doccopymaker.core.properties.Directories;
 import ru.javaprojects.doccopymaker.core.properties.DocSpecifiers;
 import ru.javaprojects.doccopymaker.core.reader.ConsignmentNoteReader;
+import ru.javaprojects.doccopymaker.core.reader.UnsupportedConsignmentNoteException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -297,6 +298,8 @@ public class AppGui {
                 });
                 log.info("Finish create copies from consignment note:{}, destination directory:{}", cNotePath, destinationDirectory);
             }
+        } catch (UnsupportedConsignmentNoteException e) {
+            JOptionPane.showMessageDialog(appFrame, "Выбранный перечень не поддерживается!", "Ошибка", ERROR_MESSAGE);
         } catch (Exception e) {
             String message = String.format("Failed create copies from consignment note:%s, destination directory:%s, " +
                     "cause:%s:%s", cNotePath, destinationDirectory, e.getClass().getName(), e.getMessage());

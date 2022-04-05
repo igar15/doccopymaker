@@ -10,7 +10,13 @@ class ConsignmentNoteReaderTest {
 
     @Test
     void getReaderWhenBadFileType() {
-        assertThrows(BadFileTypeException.class, () -> ConsignmentNoteReader.getReader("C:/textFile.txt"));
+        assertThrows(UnsupportedFileTypeException.class, () -> ConsignmentNoteReader.getReader("C:/textFile.txt"));
+    }
+
+    @Test
+    void getDecimalNumbersFromUnsupportedConsignmentNoteDocFileType() {
+        ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("src/test/resources/unsupported_consignment_note.doc");
+        assertThrows(UnsupportedConsignmentNoteException.class, reader::getDecimalNumbers);
     }
 
     @Test
@@ -29,6 +35,12 @@ class ConsignmentNoteReaderTest {
     void getDecimalNumbersFromRegularTableConsignmentNoteDocFileType() {
         ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("src/test/resources/regular_table_consignment_note.doc");
         assertEquals(regularTableDecimalNumbers, reader.getDecimalNumbers());
+    }
+
+    @Test
+    void getDecimalNumbersFromUnsupportedConsignmentNoteDocxFileType() {
+        ConsignmentNoteReader reader = ConsignmentNoteReader.getReader("src/test/resources/unsupported_consignment_note.docx");
+        assertThrows(UnsupportedConsignmentNoteException.class, reader::getDecimalNumbers);
     }
 
     @Test
