@@ -3,8 +3,8 @@ package ru.javaprojects.doccopymaker.core.reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public abstract class ConsignmentNoteReader {
     private static final Logger log = LoggerFactory.getLogger(ConsignmentNoteReader.class);
@@ -13,7 +13,7 @@ public abstract class ConsignmentNoteReader {
     public static final String DOCS_CONSIGNMENT_NOTE_IDENTIFIER = "НАКЛАДНАЯ";
     public static final String CHANGE_NOTICES_CONSIGNMENT_NOTE_IDENTIFIER = "ОПИСЬ";
     public static final String REGULAR_TABLE_CONSIGNMENT_NOTE_IDENTIFIER = "СПИСОК ЭЛЕКТРОННЫХ ДОКУМЕНТОВ";
-    private List<String> decimalNumbers;
+    private Set<String> decimalNumbers;
 
     public static ConsignmentNoteReader getReader(String cNotePath) {
         if (cNotePath.endsWith(DOCX_FILE_EXTENSION) || cNotePath.endsWith(DOC_FILE_EXTENSION)) {
@@ -26,14 +26,14 @@ public abstract class ConsignmentNoteReader {
         }
     }
 
-    public List<String> getDecimalNumbers() {
+    public Set<String> getDecimalNumbers() {
         if (Objects.isNull(decimalNumbers)) {
             decimalNumbers = readConsignmentNote();
         }
         return decimalNumbers;
     }
 
-    private List<String> readConsignmentNote() {
+    private Set<String> readConsignmentNote() {
         if (isFileDocsConsignmentNote()) {
             return readDocsConsignmentNote();
         } else if (isFileChangeNoticesConsignmentNote()) {
@@ -51,9 +51,9 @@ public abstract class ConsignmentNoteReader {
 
     protected abstract boolean isFileRegularTableConsignmentNote();
 
-    protected abstract List<String> readDocsConsignmentNote();
+    protected abstract Set<String> readDocsConsignmentNote();
 
-    protected abstract List<String> readChangeNoticesConsignmentNote();
+    protected abstract Set<String> readChangeNoticesConsignmentNote();
 
-    protected abstract List<String> readRegularTableConsignmentNote();
+    protected abstract Set<String> readRegularTableConsignmentNote();
 }

@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     private static final String DOC_SPLIT_CHARACTER = "\u0007";
@@ -63,8 +63,8 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     }
 
     @Override
-    protected List<String> readDocsConsignmentNote() {
-        List<String> decimalNumbers = new ArrayList<>();
+    protected Set<String> readDocsConsignmentNote() {
+        Set<String> decimalNumbers = new TreeSet<>();
         String rowSplitCharacter = isDocFileType ? DOC_SPLIT_CHARACTER + DOC_SPLIT_CHARACTER : "\n";
         String[] tableRows = documentText.split(rowSplitCharacter);
         for (String row : tableRows) {
@@ -80,8 +80,8 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     }
 
     @Override
-    protected List<String> readChangeNoticesConsignmentNote() {
-        List<String> decimalNumbers = new ArrayList<>();
+    protected Set<String> readChangeNoticesConsignmentNote() {
+        Set<String> decimalNumbers = new TreeSet<>();
         String wordSplitCharacter = isDocFileType ? DOC_SPLIT_CHARACTER : "\t";
         String[] words = documentText.split(wordSplitCharacter);
         for (String word : words) {
@@ -93,9 +93,9 @@ public class ConsignmentNoteWordReader extends ConsignmentNoteReader {
     }
 
     @Override
-    protected List<String> readRegularTableConsignmentNote() {
+    protected Set<String> readRegularTableConsignmentNote() {
         documentText = documentText.replace(REGULAR_TABLE_CONSIGNMENT_NOTE_IDENTIFIER, "");
         String rowSplitCharacter = isDocFileType ? DOC_SPLIT_CHARACTER + DOC_SPLIT_CHARACTER : "\n";
-        return Arrays.asList(documentText.trim().split(rowSplitCharacter));
+        return new TreeSet<>(Arrays.asList(documentText.trim().split(rowSplitCharacter)));
     }
 }

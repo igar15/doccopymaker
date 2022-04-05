@@ -14,8 +14,8 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -258,7 +258,7 @@ public class AppGui {
         });
         try {
             ConsignmentNoteReader noteReader = ConsignmentNoteReader.getReader(cNotePath.toString());
-            List<String> decimalNumbers = noteReader.getDecimalNumbers();
+            Set<String> decimalNumbers = noteReader.getDecimalNumbers();
             if (decimalNumbers.isEmpty()) {
                 JOptionPane.showMessageDialog(appFrame, "Выбранный перечень не содержит электронных документов!", "Предупреждение", JOptionPane.WARNING_MESSAGE);
             } else {
