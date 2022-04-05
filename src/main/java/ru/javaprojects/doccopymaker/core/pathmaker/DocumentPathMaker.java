@@ -96,6 +96,7 @@ public class DocumentPathMaker {
     }
 
     private String makeDecNumberLastPartPath(String lastPart) {
+        lastPart = lastPart.replace(" ", "");
         int firstLetterIndex = lastPart.replaceFirst("[А-Яа-я]", LETTER_REPLACEMENT_CHARACTER).indexOf(LETTER_REPLACEMENT_CHARACTER);
         String numbersPart = lastPart.substring(0, firstLetterIndex);
         String docSpecifierPart = lastPart.substring(firstLetterIndex);

@@ -45,6 +45,17 @@ class DocumentPathMakerTest {
     }
 
     @Test
+    void makePathWhenNotSoftwareHasSpaces() {
+        assertEquals(Paths.get("VUIA/468172/059/PE3"), pathMaker.makePath("ВУИА.468172.059 ПЭ3"));
+        assertEquals(Paths.get("VUIA/468172/059/I33"), pathMaker.makePath("ВУИА.468172.059 И33"));
+        assertEquals(Paths.get("VUIA/758782/126/T8M"), pathMaker.makePath("ВУИА.758782.126 Т8М"));
+        assertEquals(Paths.get("_UPI_A/685664/099/SB"), pathMaker.makePath("ЮПИЯ.685664.099  СБ"));
+        assertEquals(Paths.get("BA/6081/284/-02/SB"), pathMaker.makePath("БА6.081.284-02 СБ"));
+        assertEquals(Paths.get("BA/1640/016/-01/IE2.1"), pathMaker.makePath("БА1.640.016-01  ИЭ2.1"));
+        assertEquals(Paths.get("BA/1640/016/-01/ZI1(B)"), pathMaker.makePath("БА1.640.016-01 ЗИ1(Б)"));
+    }
+
+    @Test
     void makePathWhenSoftware() {
         assertEquals(Paths.get("VUIA/20163/-01/SP"), pathMaker.makePath("ВУИА.20163-01"));
         assertEquals(Paths.get("VUIA/02456/-01/SP"), pathMaker.makePath("ВУИА.02456-01"));
