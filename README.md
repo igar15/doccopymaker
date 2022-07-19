@@ -1,5 +1,5 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2dc727dad26e4b7b978dbf16c0f16e7b)](https://www.codacy.com/gh/igar15/doccopymaker/dashboard)
-[![Build Status](https://app.travis-ci.com/igar15/doccopymaker.svg?branch=master)](https://app.travis-ci.com/github/igar15/doccopymaker)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2dc727dad26e4b7b978dbf16c0f16e7b)](https://www.codacy.com/gh/ishlyakhtenkov/doccopymaker/dashboard)
+[![Build Status](https://app.travis-ci.com/ishlyakhtenkov/doccopymaker.svg?branch=master)](https://app.travis-ci.com/github/ishlyakhtenkov/doccopymaker)
 
 Document Copy Maker project 
 =================================
